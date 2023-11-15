@@ -21,7 +21,7 @@ namespace GLTFast.Newtonsoft.Schema
         TextureInfoExtensions
     >, IJsonObject
     {
-        public UnclassifiedData extras;
+        public JObject extras;
 
         [JsonExtensionData]
         IDictionary<string, JToken> m_JsonExtensionData;

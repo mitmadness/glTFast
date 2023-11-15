@@ -14,8 +14,8 @@ namespace GLTFast.Newtonsoft.Schema
 {
     public class AnimationSampler : GLTFast.Schema.AnimationSampler, IJsonObject
     {
-        public UnclassifiedData extras;
-        public UnclassifiedData extensions;
+        public JObject extras;
+        public JObject extensions;
 
         [JsonExtensionData]
         IDictionary<string, JToken> m_JsonExtensionData;

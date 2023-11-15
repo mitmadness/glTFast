@@ -14,7 +14,7 @@ namespace GLTFast.Newtonsoft.Schema
 {
     public class BufferView : BufferViewBase<BufferViewExtensions>, IJsonObject
     {
-        public UnclassifiedData extras;
+        public JObject extras;
 
         [JsonExtensionData]
         IDictionary<string, JToken> m_JsonExtensionData;

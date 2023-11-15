@@ -14,7 +14,7 @@ namespace GLTFast.Newtonsoft.Schema
 {
     public class Mesh : MeshBase<MeshExtras,MeshPrimitive>, IJsonObject
     {
-        public UnclassifiedData extensions;
+        public JObject extensions;
 
         [JsonExtensionData]
         IDictionary<string, JToken> m_JsonExtensionData;
