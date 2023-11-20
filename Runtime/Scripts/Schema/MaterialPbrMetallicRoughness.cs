@@ -2,6 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using System;
+#if NEWTONSOFT_JSON
+using Newtonsoft.Json;
+#endif
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -49,6 +52,9 @@ namespace GLTFast.Schema
         /// <summary>
         /// Base color of the material in linear color space.
         /// </summary>
+        #if NEWTONSOFT_JSON
+        [JsonIgnore]
+        #endif
         public Color BaseColor
         {
             get =>

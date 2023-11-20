@@ -17,6 +17,12 @@ namespace GLTFast.Newtonsoft.Schema
         public JObject extras;
         public JObject extensions;
 
+        /// <summary>
+        /// The index of the bufferView that contains the image.
+        /// Use this instead of the image's uri property.
+        /// </summary>
+        public new int? bufferView;
+
         [JsonExtensionData]
         IDictionary<string, JToken> m_JsonExtensionData;
 

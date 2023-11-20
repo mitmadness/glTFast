@@ -16,14 +16,14 @@ namespace GLTFast.Schema
         /// <summary>
         /// Light index
         /// </summary>
-        public int light = -1;
+        public int? light;
 
         internal void GltfSerialize(JsonWriter writer)
         {
             writer.AddObject();
-            if (light >= 0)
+            if (light.HasValue)
             {
-                writer.AddProperty("light", light);
+                writer.AddProperty("light", light.Value);
             }
             writer.Close();
         }

@@ -2110,10 +2110,10 @@ namespace GLTFast
                             case AnimationChannel.Path.Weights: {
                                 var values= ((AccessorNativeData<float>) m_AccessorData[sampler.output]).data;
                                 var node = Root.Nodes[channel.Target.node];
-                                if (node.mesh < 0 || node.mesh >= Root.Meshes.Count) {
+                                if (!node.mesh.HasValue || node.mesh >= Root.Meshes.Count) {
                                     break;
                                 }
-                                var mesh = Root.Meshes[node.mesh];
+                                var mesh = Root.Meshes[node.mesh.Value];
                                 AnimationUtils.AddMorphTargetWeightCurves(
                                     m_AnimationClips[i],
                                     path,
@@ -2131,7 +2131,7 @@ namespace GLTFast
                                 // TODO: Refactor primitive sub-meshing and remove this hack
                                 // https://github.com/atteneder/glTFast/issues/153
                                 var meshName = string.IsNullOrEmpty(mesh.name) ? k_PrimitiveName : mesh.name;
-                                var primitiveCount = m_MeshPrimitiveIndex[node.mesh + 1] - m_MeshPrimitiveIndex[node.mesh];
+                                var primitiveCount = m_MeshPrimitiveIndex[node.mesh.Value + 1] - m_MeshPrimitiveIndex[node.mesh.Value];
                                 for (var k = 1; k < primitiveCount; k++) {
                                     var primitiveName = $"{meshName}_{k}";
                                     AnimationUtils.AddMorphTargetWeightCurves(
@@ -2255,9 +2255,9 @@ namespace GLTFast
             if (string.IsNullOrWhiteSpace(name))
             {
                 var meshIndex = gltf.Nodes[(int)index].mesh;
-                if (meshIndex >= 0)
+                if (meshIndex.HasValue)
                 {
-                    name = gltf.Meshes[meshIndex].name;
+                    name = gltf.Meshes[meshIndex.Value].name;
                 }
             }
 
@@ -2394,11 +2394,11 @@ namespace GLTFast
                 var node = Root.Nodes[(int)nodeIndex];
                 var goName = m_NodeNames == null ? node.name : m_NodeNames[nodeIndex];
 
-                if (node.mesh >= 0)
+                if (node.mesh.HasValue)
                 {
-                    var end = m_MeshPrimitiveIndex[node.mesh + 1];
+                    var end = m_MeshPrimitiveIndex[node.mesh.Value + 1];
                     var primitiveCount = 0;
-                    for (var i = m_MeshPrimitiveIndex[node.mesh]; i < end; i++)
+                    for (var i = m_MeshPrimitiveIndex[node.mesh.Value]; i < end; i++)
                     {
                         var primitive = m_Primitives[i];
                         var mesh = primitive.mesh;
@@ -2410,11 +2410,11 @@ namespace GLTFast
 
                         if (mesh.HasVertexAttribute(UnityEngine.Rendering.VertexAttribute.BlendIndices))
                         {
-                            if (node.skin >= 0)
+                            if (node.skin.HasValue)
                             {
-                                var skin = gltf.Skins[node.skin];
+                                var skin = gltf.Skins[node.skin.Value];
                                 // TODO: see if this can be moved to mesh creation phase / before instantiation
-                                mesh.bindposes = GetBindPoses(node.skin);
+                                mesh.bindposes = GetBindPoses(node.skin.Value);
                                 if (skin.skeleton >= 0)
                                 {
                                     rootJoint = (uint)skin.skeleton;
@@ -2442,7 +2442,7 @@ namespace GLTFast
                                 primitive,
                                 joints,
                                 rootJoint,
-                                gltf.Meshes[node.mesh].weights,
+                                gltf.Meshes[node.mesh.Value].weights,
                                 primitiveCount
                             );
                         }

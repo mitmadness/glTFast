@@ -4,6 +4,7 @@
 using System;
 
 #if NEWTONSOFT_JSON
+using Newtonsoft.Json;
 #endif
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -42,6 +43,9 @@ namespace GLTFast.Schema
         /// <summary>
         /// Light's color in linear space
         /// </summary>
+#if NEWTONSOFT_JSON
+        [JsonIgnore]
+#endif
         public Color LightColor
         {
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -72,6 +76,9 @@ namespace GLTFast.Schema
         /// spot lights. Must be > 0. When undefined, range is assumed to be
         /// infinite.
         /// </summary>
+#if NEWTONSOFT_JSON
+        [JsonIgnore]
+#endif
         public float range = -1;
 
         /// <summary>
@@ -82,10 +89,18 @@ namespace GLTFast.Schema
         /// <inheritdoc cref="Type"/>
         // Field is public for unified serialization only. Warn via Obsolete attribute.
         [Obsolete("Use GetLightType and SetLightType for access.")]
+#if NEWTONSOFT_JSON
+        [JsonIgnore]
+#endif
         public string type;
 
         [NonSerialized]
         Type m_TypeEnum = Type.Unknown;
+
+        #if NEWTONSOFT_JSON
+        [JsonProperty("type")]
+        public string LightType;
+        #endif
 
         /// <summary>
         /// Returns the type of the light
@@ -112,6 +127,9 @@ namespace GLTFast.Schema
         /// <param name="lightType">Light type</param>
         public void SetLightType(Type lightType)
         {
+#if NEWTONSOFT_JSON
+            LightType = lightType == Type.Unknown ? null : lightType.ToString().ToLowerInvariant();
+#endif
             m_TypeEnum = lightType;
 #pragma warning disable CS0618 // Type or member is obsolete
             type = null;

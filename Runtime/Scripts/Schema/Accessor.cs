@@ -194,7 +194,7 @@ namespace GLTFast.Schema
         /// <see cref="GltfAccessorAttributeType"/> typed setter for the <see cref="type"/> string.
         /// </summary>
         /// <param name="attributeType">Attribute type</param>
-        public void SetAttributeType(GltfAccessorAttributeType attributeType)
+        public virtual void SetAttributeType(GltfAccessorAttributeType attributeType)
         {
             m_TypeEnum = attributeType;
 #pragma warning disable CS0618 // Type or member is obsolete

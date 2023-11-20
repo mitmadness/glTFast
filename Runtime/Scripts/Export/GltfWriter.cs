@@ -856,7 +856,7 @@ namespace GLTFast.Export
                     var nodeId = nodeMaterial.Key;
                     var materialIds = nodeMaterial.Value;
                     var node = m_Nodes[nodeId];
-                    var originalMeshId = node.mesh;
+                    var originalMeshId = node.mesh!.Value;
                     var mesh = m_Meshes[originalMeshId];
 
                     var meshMaterialCombo = new MeshMaterialCombination(originalMeshId, materialIds);

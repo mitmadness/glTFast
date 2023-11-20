@@ -3,6 +3,9 @@
 
 using System;
 using UnityEngine;
+#if NEWTONSOFT_JSON
+using Newtonsoft.Json;
+#endif
 
 namespace GLTFast.Schema
 {
@@ -57,6 +60,9 @@ namespace GLTFast.Schema
         /// <inheritdoc cref="Type"/>
         // Field is public for unified serialization only. Warn via Obsolete attribute.
         [Obsolete("Use GetCameraType and SetCameraType for access.")]
+#if NEWTONSOFT_JSON
+        [JsonIgnore]
+#endif
         public string type;
 
         Type? m_TypeEnum;
@@ -90,7 +96,7 @@ namespace GLTFast.Schema
         /// <see cref="Type"/> typed setter for <see cref="type"/> string.
         /// </summary>
         /// <param name="cameraType">Camera type</param>
-        public void SetCameraType(Type cameraType)
+        public virtual void SetCameraType(Type cameraType)
         {
 #pragma warning disable CS0618 // Type or member is obsolete
             type = null;

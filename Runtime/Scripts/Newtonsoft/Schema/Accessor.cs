@@ -17,11 +17,20 @@ namespace GLTFast.Newtonsoft.Schema
         public JObject extras;
         public JObject extensions;
 
+        [JsonProperty("type")]
+        public string AccessorType { get; set; }
+
         [JsonExtensionData]
         IDictionary<string, JToken> m_JsonExtensionData;
 
         [Preserve]
         public Accessor() {}
+
+        public override void SetAttributeType(GltfAccessorAttributeType attributeType)
+        {
+            base.SetAttributeType(attributeType);
+            AccessorType = attributeType.ToString();
+        }
 
         public bool TryGetValue<T>(string key, out T value)
         {

@@ -42,7 +42,7 @@ namespace GLTFast.Schema
         /// <summary>
         /// The index of the mesh in this node.
         /// </summary>
-        public int mesh = -1;
+        public int? mesh;
 
         /// <summary>
         /// A floating-point 4x4 transformation matrix stored in column-major order.
@@ -74,12 +74,12 @@ namespace GLTFast.Schema
         /// <summary>
         /// The index of the skin (in <see cref="RootBase.Skins"/> referenced by this node.
         /// </summary>
-        public int skin = -1;
+        public int? skin;
 
         /// <summary>
         /// Camera index
         /// </summary>
-        public int camera = -1;
+        public int? camera;
 
         /// <inheritdoc cref="NodeExtensions"/>
         public abstract NodeExtensions Extensions { get; }

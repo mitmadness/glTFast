@@ -2,6 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using System;
+#if NEWTONSOFT_JSON
+using Newtonsoft.Json;
+#endif
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -164,6 +167,9 @@ namespace GLTFast.Schema
         /// <summary>
         /// Emissive color of the material.
         /// </summary>
+        #if NEWTONSOFT_JSON
+        [JsonIgnore]
+        #endif
         public Color Emissive
         {
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -215,7 +221,7 @@ namespace GLTFast.Schema
         /// <see cref="AlphaMode"/> typed setter for <see cref="alphaMode"/> string.
         /// </summary>
         /// <param name="mode">Alpha mode</param>
-        public void SetAlphaMode(AlphaMode mode)
+        public virtual void SetAlphaMode(AlphaMode mode)
         {
             m_AlphaModeEnum = mode;
 #pragma warning disable CS0618 // Type or member is obsolete

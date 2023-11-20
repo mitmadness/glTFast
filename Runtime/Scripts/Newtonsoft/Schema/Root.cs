@@ -4,10 +4,13 @@
 #if NEWTONSOFT_JSON
 
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using GLTFast.Schema;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using UnityEngine.Scripting;
 
 namespace GLTFast.Newtonsoft.Schema
@@ -49,6 +52,28 @@ namespace GLTFast.Newtonsoft.Schema
 
             value = default;
             return false;
+        }
+
+        public void GltfSerializeWithNewtonSoft(StreamWriter stream)
+        {
+            var options = new JsonSerializerSettings
+            {
+                ContractResolver = new WritablePropertiesOnlyResolver(),
+                NullValueHandling = NullValueHandling.Ignore,
+            };
+
+            var json = JsonConvert.SerializeObject(this, options);
+            stream.Write(json);
+        }
+    }
+
+    // Source: https://stackoverflow.com/questions/18543482/is-there-a-way-to-ignore-get-only-properties-in-json-net-without-using-jsonignor/18548894#18548894
+    public class WritablePropertiesOnlyResolver : DefaultContractResolver
+    {
+        protected override IList<JsonProperty> CreateProperties(System.Type type, MemberSerialization memberSerialization)
+        {
+            IList<JsonProperty> props = base.CreateProperties(type, memberSerialization);
+            return props.Where(p => p.Writable).ToList();
         }
     }
 }
