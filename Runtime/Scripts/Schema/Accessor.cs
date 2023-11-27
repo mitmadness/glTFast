@@ -161,24 +161,13 @@ namespace GLTFast.Schema
         /// </summary>
         public int count;
 
-        /// <summary>
-        /// Specifies if the attribute is a scalar, vector, or matrix,
-        /// and the number of elements in the vector or matrix.
-        /// </summary>
-        // Field is public for unified serialization only. Warn via Obsolete attribute.
-        [Obsolete("Use GetAttributeType and SetAttributeType for access.")]
-#if NEWTONSOFT_JSON
-        [JsonIgnore]  
-#endif
-        public string type;
-
         [NonSerialized]
         GltfAccessorAttributeType m_TypeEnum = GltfAccessorAttributeType.Undefined;
 
 #if NEWTONSOFT_JSON
         [JsonProperty("type")]
-        public string AccessorType { get; set; }
 #endif
+        public string type;
 
         /// <summary>
         /// <see cref="GltfAccessorAttributeType"/> typed/cached getter from the <see cref="type"/> string.
@@ -189,16 +178,6 @@ namespace GLTFast.Schema
             if (m_TypeEnum != GltfAccessorAttributeType.Undefined)
                 return m_TypeEnum;
 
-#pragma warning disable CS0618 // Type or member is obsolete
-            if (Enum.TryParse(type, true, out m_TypeEnum))
-            {
-                type = null;
-                return m_TypeEnum;
-            }
-
-            type = null;
-#pragma warning restore CS0618 // Type or member is obsolete
-
             return GltfAccessorAttributeType.Undefined;
         }
 
@@ -208,14 +187,8 @@ namespace GLTFast.Schema
         /// <param name="attributeType">Attribute type</param>
         public void SetAttributeType(GltfAccessorAttributeType attributeType)
         {
-#if NEWTONSOFT_JSON
-            AccessorType = attributeType.ToString();
-#endif
-
+            type = attributeType.ToString();
             m_TypeEnum = attributeType;
-#pragma warning disable CS0618 // Type or member is obsolete
-            type = null;
-#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         /// <summary>

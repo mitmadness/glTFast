@@ -57,20 +57,9 @@ namespace GLTFast.Schema
             Perspective
         }
 
-        /// <inheritdoc cref="Type"/>
-        // Field is public for unified serialization only. Warn via Obsolete attribute.
-        [Obsolete("Use GetCameraType and SetCameraType for access.")]
-#if NEWTONSOFT_JSON
-        [JsonIgnore]
-#endif
-        public string type;
-
         Type? m_TypeEnum;
-        
-#if NEWTONSOFT_JSON
-        [JsonProperty("type")]
-        public string CameraType { get; set; }
-#endif
+    
+        public string type;
 
         /// <summary>
         /// <see cref="Type"/> typed and cached getter onto <see cref="type"/> string.
@@ -83,15 +72,6 @@ namespace GLTFast.Schema
                 return m_TypeEnum.Value;
             }
 
-#pragma warning disable CS0618 // Type or member is obsolete
-            if (Enum.TryParse<Type>(type, true, out var typeEnum))
-            {
-                m_TypeEnum = typeEnum;
-                type = null;
-                return m_TypeEnum.Value;
-            }
-#pragma warning restore CS0618 // Type or member is obsolete
-
             if (Orthographic != null) m_TypeEnum = Type.Orthographic;
             if (Perspective != null) m_TypeEnum = Type.Perspective;
             return m_TypeEnum ?? Type.Perspective;
@@ -103,12 +83,7 @@ namespace GLTFast.Schema
         /// <param name="cameraType">Camera type</param>
         public virtual void SetCameraType(Type cameraType)
         {
-#if NEWTONSOFT_JSON
-            CameraType = cameraType.ToString().ToLower();
-#endif
-#pragma warning disable CS0618 // Type or member is obsolete
-            type = null;
-#pragma warning restore CS0618 // Type or member is obsolete
+            type = cameraType.ToString().ToLower();
             m_TypeEnum = cameraType;
         }
 
