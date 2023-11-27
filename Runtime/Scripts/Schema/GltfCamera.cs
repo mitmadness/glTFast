@@ -66,6 +66,11 @@ namespace GLTFast.Schema
         public string type;
 
         Type? m_TypeEnum;
+        
+#if NEWTONSOFT_JSON
+        [JsonProperty("type")]
+        public string CameraType { get; set; }
+#endif
 
         /// <summary>
         /// <see cref="Type"/> typed and cached getter onto <see cref="type"/> string.
@@ -98,6 +103,9 @@ namespace GLTFast.Schema
         /// <param name="cameraType">Camera type</param>
         public virtual void SetCameraType(Type cameraType)
         {
+#if NEWTONSOFT_JSON
+            CameraType = cameraType.ToString().ToLower();
+#endif
 #pragma warning disable CS0618 // Type or member is obsolete
             type = null;
 #pragma warning restore CS0618 // Type or member is obsolete

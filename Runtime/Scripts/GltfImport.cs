@@ -2692,7 +2692,7 @@ namespace GLTFast
 
                 if (imgFormat != ImageFormat.Unknown)
                 {
-                    if (img.bufferView >= 0)
+                    if (img.bufferView.HasValue)
                     {
 
                         if (imgFormat == ImageFormat.Ktx)
@@ -2713,7 +2713,7 @@ namespace GLTFast
                         else
                         {
                             Profiler.BeginSample("CreateTexturesFromBuffers.ExtractBuffer");
-                            var bufferView = bufferViews[img.bufferView];
+                            var bufferView = bufferViews[img.bufferView.Value];
                             var buffer = GetBuffer(bufferView.buffer);
                             var chunk = m_BinChunks[bufferView.buffer];
 
@@ -2747,7 +2747,7 @@ namespace GLTFast
         {
             var job = new MemCopyJob();
             job.bufferSize = bufferView.byteLength;
-            fixed (void* src = &(buffer[bufferView.byteOffset + chunk.Start]), dst = &(icc.buffer[0]))
+            fixed (void* src = &(buffer[bufferView.ByteOffset + chunk.Start]), dst = &(icc.buffer[0]))
             {
                 job.input = src;
                 job.result = dst;
@@ -2865,7 +2865,7 @@ namespace GLTFast
                     var isDraco = false;
 #endif
                     var att = primitive.attributes;
-                    if (primitive.indices >= 0)
+                    if (primitive.indices.HasValue)
                     {
                         var usage = (
                             primitive.mode == DrawMode.Triangles
@@ -2874,7 +2874,7 @@ namespace GLTFast
                             )
                         ? AccessorUsage.IndexFlipped
                         : AccessorUsage.Index;
-                        SetAccessorUsage(primitive.indices, isDraco ? AccessorUsage.Ignore : usage);
+                        SetAccessorUsage(primitive.indices.Value, isDraco ? AccessorUsage.Ignore : usage);
                     }
 
                     if (!mainBufferTypes.TryGetValue(primitive, out var mainBufferType))
@@ -2896,11 +2896,11 @@ namespace GLTFast
                     if (primitive.mode == DrawMode.Triangles || primitive.mode == DrawMode.TriangleFan ||
                         primitive.mode == DrawMode.TriangleStrip)
                     {
-                        if (primitive.material < 0 || gltf.Materials[primitive.material].RequiresNormals)
+                        if (!primitive.material.HasValue || gltf.Materials[primitive.material.Value].RequiresNormals)
                         {
                             mainBufferType |= MainBufferType.Normal;
                         }
-                        if (primitive.material >= 0 && gltf.Materials[primitive.material].RequiresTangents)
+                        if (primitive.material.HasValue && gltf.Materials[primitive.material.Value].RequiresTangents)
                         {
                             mainBufferType |= MainBufferType.Tangent;
                         }
@@ -2915,11 +2915,11 @@ namespace GLTFast
                     attributeMesh.Add(meshIndex);
 #endif
 
-                    if (primitive.material >= 0)
+                    if (primitive.material.HasValue)
                     {
                         if (gltf.Materials != null && primitive.mode == DrawMode.Points)
                         {
-                            SetMaterialPointsSupport(primitive.material);
+                            SetMaterialPointsSupport(primitive.material.Value);
                         }
                     }
                     else
@@ -2998,47 +2998,47 @@ namespace GLTFast
                 bool hasTangents = att.TANGENT >= 0;
 
                 int[] uvInputs = null;
-                if (att.TEXCOORD_0 >= 0)
+                if (att.TEXCOORD_0.HasValue)
                 {
                     int uvCount = 1;
-                    if (att.TEXCOORD_1 >= 0) uvCount++;
-                    if (att.TEXCOORD_2 >= 0) uvCount++;
-                    if (att.TEXCOORD_3 >= 0) uvCount++;
-                    if (att.TEXCOORD_4 >= 0) uvCount++;
-                    if (att.TEXCOORD_5 >= 0) uvCount++;
-                    if (att.TEXCOORD_6 >= 0) uvCount++;
-                    if (att.TEXCOORD_7 >= 0) uvCount++;
+                    if (att.TEXCOORD_1.HasValue) uvCount++;
+                    if (att.TEXCOORD_2.HasValue) uvCount++;
+                    if (att.TEXCOORD_3.HasValue) uvCount++;
+                    if (att.TEXCOORD_4.HasValue) uvCount++;
+                    if (att.TEXCOORD_5.HasValue) uvCount++;
+                    if (att.TEXCOORD_6.HasValue) uvCount++;
+                    if (att.TEXCOORD_7.HasValue) uvCount++;
                     uvInputs = new int[uvCount];
-                    uvInputs[0] = att.TEXCOORD_0;
-                    if (att.TEXCOORD_1 >= 0)
+                    uvInputs[0] = att.TEXCOORD_0.Value;
+                    if (att.TEXCOORD_1.HasValue)
                     {
-                        uvInputs[1] = att.TEXCOORD_1;
+                        uvInputs[1] = att.TEXCOORD_1.Value;
                     }
-                    if (att.TEXCOORD_2 >= 0)
+                    if (att.TEXCOORD_2.HasValue)
                     {
-                        uvInputs[2] = att.TEXCOORD_2;
+                        uvInputs[2] = att.TEXCOORD_2.Value;
                     }
-                    if (att.TEXCOORD_3 >= 0)
+                    if (att.TEXCOORD_3.HasValue)
                     {
-                        uvInputs[3] = att.TEXCOORD_3;
+                        uvInputs[3] = att.TEXCOORD_3.Value;
                     }
-                    if (att.TEXCOORD_4 >= 0)
+                    if (att.TEXCOORD_4.HasValue)
                     {
-                        uvInputs[4] = att.TEXCOORD_4;
+                        uvInputs[4] = att.TEXCOORD_4.Value;
                     }
-                    if (att.TEXCOORD_5 >= 0)
+                    if (att.TEXCOORD_5.HasValue)
                     {
-                        uvInputs[5] = att.TEXCOORD_5;
+                        uvInputs[5] = att.TEXCOORD_5.Value;
                     }
-                    if (att.TEXCOORD_6 >= 0)
+                    if (att.TEXCOORD_6.HasValue)
                     {
-                        uvInputs[6] = att.TEXCOORD_6;
+                        uvInputs[6] = att.TEXCOORD_6.Value;
                     }
-                    if (att.TEXCOORD_7 >= 0)
+                    if (att.TEXCOORD_7.HasValue)
                     {
-                        uvInputs[7] = att.TEXCOORD_7;
+                        uvInputs[7] = att.TEXCOORD_7.Value;
                     }
-                    if (att.TEXCOORD_8 >= 0)
+                    if (att.TEXCOORD_8.HasValue)
                     {
                         m_Logger?.Warning(LogCode.UVLimit);
                     }
@@ -3066,13 +3066,13 @@ namespace GLTFast
 
                 var jh = config.ScheduleVertexJobs(
                     this,
-                    att.POSITION,
-                    att.NORMAL,
-                    att.TANGENT,
+                    att.POSITION.Value,
+                    att.NORMAL.Value,
+                    att.TANGENT.Value,
                     uvInputs,
-                    att.COLOR_0,
-                    att.WEIGHTS_0,
-                    att.JOINTS_0
+                    att.COLOR_0.Value,
+                    att.WEIGHTS_0.Value,
+                    att.JOINTS_0.Value
                 );
 
                 if (jh.HasValue)
@@ -3275,7 +3275,7 @@ namespace GLTFast
                             context.morphTargetsContext = morphTargetsContexts[primitive];
                         }
 
-                        context.SetMaterial(primIndex, primitive.material);
+                        context.SetMaterial(primIndex, primitive.material.Value);
                     }
 
                     m_PrimitiveContexts[primitiveIndex] = context;
@@ -3435,13 +3435,13 @@ namespace GLTFast
                     break;
             }
 
-            if (primitive.indices >= 0)
+            if (primitive.indices.HasValue)
             {
-                c.SetIndices(subMesh, ((AccessorData<int>)m_AccessorData[primitive.indices]).data);
+                c.SetIndices(subMesh, ((AccessorData<int>)m_AccessorData[primitive.indices.Value]).data);
             }
             else
             {
-                int vertexCount = gltf.Accessors[primitive.attributes.POSITION].count;
+                int vertexCount = gltf.Accessors[primitive.attributes.POSITION!.Value].count;
                 CalculateIndicesJob(primitive, vertexCount, c.topology, out var indices, out c.jobHandle, out c.calculatedIndicesHandle);
                 c.SetIndices(subMesh, indices);
             }
@@ -3845,10 +3845,10 @@ namespace GLTFast
             } else
 #endif
             {
-                byteStride = bufferView.byteStride;
+                byteStride = bufferView.ByteStride;
                 var bufferIndex = bufferView.buffer;
                 var buffer = GetBuffer(bufferIndex);
-                fixed (void* src = &(buffer[accessor.byteOffset + bufferView.byteOffset + m_BinChunks[bufferIndex].Start]))
+                fixed (void* src = &(buffer[accessor.byteOffset + bufferView.ByteOffset + m_BinChunks[bufferIndex].Start]))
                 {
                     data = src;
                 }
@@ -3877,7 +3877,7 @@ namespace GLTFast
             {
                 var bufferIndex = bufferView.buffer;
                 var buffer = GetBuffer(bufferIndex);
-                fixed (void* src = &(buffer[sparseIndices.byteOffset + bufferView.byteOffset + m_BinChunks[bufferIndex].Start]))
+                fixed (void* src = &(buffer[sparseIndices.byteOffset + bufferView.ByteOffset + m_BinChunks[bufferIndex].Start]))
                 {
                     data = src;
                 }
@@ -3902,7 +3902,7 @@ namespace GLTFast
             {
                 var bufferIndex = bufferView.buffer;
                 var buffer = GetBuffer(bufferIndex);
-                fixed (void* src = &(buffer[sparseValues.byteOffset + bufferView.byteOffset + m_BinChunks[bufferIndex].Start]))
+                fixed (void* src = &(buffer[sparseValues.byteOffset + bufferView.ByteOffset + m_BinChunks[bufferIndex].Start]))
                 {
                     data = src;
                 }

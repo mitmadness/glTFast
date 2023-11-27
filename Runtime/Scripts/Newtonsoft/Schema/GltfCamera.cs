@@ -14,9 +14,6 @@ namespace GLTFast.Newtonsoft.Schema
 {
     public class Camera : CameraBase<CameraOrthographic,CameraPerspective>, IJsonObject
     {
-        [JsonProperty("type")]
-        public string CameraType { get; set; }
-
         public JObject extras;
         public JObject extensions;
 
@@ -25,12 +22,6 @@ namespace GLTFast.Newtonsoft.Schema
 
         [Preserve]
         public Camera() {}
-
-        public override void SetCameraType(Type cameraType)
-        {
-            base.SetCameraType(cameraType);
-            CameraType = cameraType.ToString().ToLower();
-        }
 
         public bool TryGetValue<T>(string key, out T value)
         {

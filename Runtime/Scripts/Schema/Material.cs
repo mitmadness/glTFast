@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using System;
+using JetBrains.Annotations;
 #if NEWTONSOFT_JSON
 using Newtonsoft.Json;
 #endif
@@ -161,8 +162,8 @@ namespace GLTFast.Schema
         /// values.
         /// </summary>
         // Field is public for unified serialization only. Warn via Obsolete attribute.
-        [Obsolete("Use Emissive for access.")]
-        public float[] emissiveFactor = { 0, 0, 0 };
+        [Obsolete("Use Emissive for access."), CanBeNull]
+        public float[] emissiveFactor;
 
         /// <summary>
         /// Emissive color of the material.
@@ -173,11 +174,11 @@ namespace GLTFast.Schema
         public Color Emissive
         {
 #pragma warning disable CS0618 // Type or member is obsolete
-            get => new Color(
+            get => emissiveFactor is null ? Color.black : new Color(
                 emissiveFactor[0],
                 emissiveFactor[1],
                 emissiveFactor[2]
-                );
+            );
             set => emissiveFactor = new[] { value.r, value.g, value.b };
 #pragma warning restore CS0618 // Type or member is obsolete
         }
@@ -193,9 +194,17 @@ namespace GLTFast.Schema
         /// </summary>
         // Field is public for unified serialization only. Warn via Obsolete attribute.
         [Obsolete("Use GetAlphaMode and SetAlphaMode for access.")]
+#if NEWTONSOFT_JSON
+        [JsonIgnore]
+#endif
         public string alphaMode;
 
         AlphaMode? m_AlphaModeEnum;
+        
+#if NEWTONSOFT_JSON
+        [JsonProperty("alphaMode"), CanBeNull]
+        public string AlphaModeProperty;
+#endif
 
         /// <summary>
         /// <see cref="AlphaMode"/> typed and cached getter for <see cref="alphaMode"/> string.
@@ -221,8 +230,11 @@ namespace GLTFast.Schema
         /// <see cref="AlphaMode"/> typed setter for <see cref="alphaMode"/> string.
         /// </summary>
         /// <param name="mode">Alpha mode</param>
-        public virtual void SetAlphaMode(AlphaMode mode)
+        public void SetAlphaMode(AlphaMode mode)
         {
+#if NEWTONSOFT_JSON
+            AlphaModeProperty = mode.ToString().ToUpper();
+#endif
             m_AlphaModeEnum = mode;
 #pragma warning disable CS0618 // Type or member is obsolete
             alphaMode = null;
@@ -234,7 +246,9 @@ namespace GLTFast.Schema
         /// or equal to this value then it is rendered as fully opaque, otherwise, it is rendered
         /// as fully transparent. This value is ignored for other modes.
         /// </summary>
-        public float alphaCutoff = 0.5f;
+        public float? alphaCutoff;
+
+        public float AlphaCutoff => alphaCutoff ?? 0.5f;
 
         /// <summary>
         /// Specifies whether the material is double sided. When this value is false, back-face
@@ -293,9 +307,9 @@ namespace GLTFast.Schema
             {
                 writer.AddProperty("alphaMode", m_AlphaModeEnum.Value.ToString().ToUpper());
             }
-            if (math.abs(alphaCutoff - .5f) > Constants.epsilon)
+            if (alphaCutoff.HasValue)
             {
-                writer.AddProperty("alphaCutoff", alphaCutoff);
+                writer.AddProperty("alphaCutoff", alphaCutoff.Value);
             }
             if (doubleSided)
             {

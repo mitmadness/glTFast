@@ -41,7 +41,7 @@ namespace GLTFast.Schema
         /// <summary>
         /// The offset into the buffer in bytes.
         /// </summary>
-        public int byteOffset;
+        public int? byteOffset;
 
         /// <summary>
         /// The length of the bufferView in bytes.
@@ -52,7 +52,7 @@ namespace GLTFast.Schema
         /// The stride, in bytes, between vertex attributes or other interleaved data.
         /// When this is zero, data is tightly packed.
         /// </summary>
-        public int byteStride = -1;
+        public int? byteStride;
 
         /// <summary>
         /// The target that the WebGL buffer should be bound to.
@@ -65,10 +65,12 @@ namespace GLTFast.Schema
         public int Buffer => buffer;
 
         /// <inheritdoc cref="IBufferView.ByteOffset"/>
-        public int ByteOffset => byteOffset;
+        public int ByteOffset => byteOffset ?? 0;
 
         /// <inheritdoc cref="IBufferView.ByteLength"/>
         public int ByteLength => byteLength;
+        
+        public int ByteStride => byteStride ?? 0;
 
         internal void GltfSerialize(JsonWriter writer)
         {

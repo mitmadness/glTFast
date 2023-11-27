@@ -562,7 +562,7 @@ namespace GLTFast.Materials {
         }
 
         protected virtual void SetAlphaModeMask(MaterialBase gltfMaterial, Material material) {
-            material.SetFloat(AlphaCutoffProperty, gltfMaterial.alphaCutoff);
+            material.SetFloat(AlphaCutoffProperty, gltfMaterial.AlphaCutoff);
 #if USING_HDRP_10_OR_NEWER || USING_URP_12_OR_NEWER
             material.EnableKeyword(AlphaTestOnKeyword);
             material.SetOverrideTag(RenderTypeTag, TransparentCutoutRenderType);

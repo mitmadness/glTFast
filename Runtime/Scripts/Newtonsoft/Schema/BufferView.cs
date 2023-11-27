@@ -14,18 +14,6 @@ namespace GLTFast.Newtonsoft.Schema
 {
     public class BufferView : BufferViewBase<BufferViewExtensions>, IJsonObject
     {
-
-        /// <summary>
-        /// The offset into the buffer in bytes.
-        /// </summary>
-        public new int? byteOffset;
-
-        /// <summary>
-        /// The stride, in bytes, between vertex attributes or other interleaved data.
-        /// When this is zero, data is tightly packed.
-        /// </summary>
-        public new int? byteStride = null;
-
         public JObject extras;
 
         [JsonExtensionData]

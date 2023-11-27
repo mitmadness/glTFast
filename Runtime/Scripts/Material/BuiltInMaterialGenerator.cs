@@ -240,7 +240,7 @@ namespace GLTFast.Materials
 
             if (gltfMaterial.GetAlphaMode() == AlphaMode.Mask)
             {
-                material.SetFloat(AlphaCutoffProperty, gltfMaterial.alphaCutoff);
+                material.SetFloat(AlphaCutoffProperty, gltfMaterial.AlphaCutoff);
                 shaderMode = StandardShaderMode.Cutout;
             }
             else if (gltfMaterial.GetAlphaMode() == AlphaMode.Blend)
@@ -431,7 +431,7 @@ namespace GLTFast.Materials
         /// <param name="gltfMaterial">Source material</param>
         static void SetAlphaModeMask(Material material, Schema.MaterialBase gltfMaterial)
         {
-            SetAlphaModeMask(material, gltfMaterial.alphaCutoff);
+            SetAlphaModeMask(material, gltfMaterial.AlphaCutoff);
         }
 
         /// <summary>

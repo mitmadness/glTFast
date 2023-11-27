@@ -14,27 +14,6 @@ namespace GLTFast.Newtonsoft.Schema
 {
     public class Node : NodeBase<NodeExtensions>, IJsonObject
     {
-        /// <summary>
-        /// The index of the mesh in this node.
-        /// </summary>
-        public new int? mesh;
-
-        // /// <summary>
-        // /// The weights of the instantiated Morph Target.
-        // /// Number of elements must match number of Morph Targets of used mesh.
-        // /// </summary>
-        // public double[] weights;
-
-        /// <summary>
-        /// The index of the skin (in <see cref="RootBase.Skins"/> referenced by this node.
-        /// </summary>
-        public new int? skin;
-
-        /// <summary>
-        /// Camera index
-        /// </summary>
-        public new int? camera;
-
         public JObject extras;
 
         [JsonExtensionData]

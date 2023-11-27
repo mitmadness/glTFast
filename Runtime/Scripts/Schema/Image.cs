@@ -26,7 +26,7 @@ namespace GLTFast.Schema
         /// The index of the bufferView that contains the image.
         /// Use this instead of the image's uri property.
         /// </summary>
-        public int bufferView = -1;
+        public int? bufferView;
 
         internal void GltfSerialize(JsonWriter writer)
         {

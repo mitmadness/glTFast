@@ -9,6 +9,10 @@ using UnityEngine.Assertions;
 // GLTF_EXPORT
 using UnityEngine.Rendering;
 
+#if NEWTONSOFT_JSON
+using Newtonsoft.Json;
+#endif
+
 namespace GLTFast.Schema
 {
 
@@ -163,10 +167,18 @@ namespace GLTFast.Schema
         /// </summary>
         // Field is public for unified serialization only. Warn via Obsolete attribute.
         [Obsolete("Use GetAttributeType and SetAttributeType for access.")]
+#if NEWTONSOFT_JSON
+        [JsonIgnore]  
+#endif
         public string type;
 
         [NonSerialized]
         GltfAccessorAttributeType m_TypeEnum = GltfAccessorAttributeType.Undefined;
+
+#if NEWTONSOFT_JSON
+        [JsonProperty("type")]
+        public string AccessorType { get; set; }
+#endif
 
         /// <summary>
         /// <see cref="GltfAccessorAttributeType"/> typed/cached getter from the <see cref="type"/> string.
@@ -194,8 +206,12 @@ namespace GLTFast.Schema
         /// <see cref="GltfAccessorAttributeType"/> typed setter for the <see cref="type"/> string.
         /// </summary>
         /// <param name="attributeType">Attribute type</param>
-        public virtual void SetAttributeType(GltfAccessorAttributeType attributeType)
+        public void SetAttributeType(GltfAccessorAttributeType attributeType)
         {
+#if NEWTONSOFT_JSON
+            AccessorType = attributeType.ToString();
+#endif
+
             m_TypeEnum = attributeType;
 #pragma warning disable CS0618 // Type or member is obsolete
             type = null;
