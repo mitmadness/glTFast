@@ -81,6 +81,11 @@ namespace GLTFast.Schema
         /// </summary>
         public int? camera;
 
+        /// <summary>
+        /// Array of weights to be applied to the Morph Targets.
+        /// </summary>
+        public float[] weights;
+
         /// <inheritdoc cref="NodeExtensions"/>
         public abstract NodeExtensions Extensions { get; }
 
